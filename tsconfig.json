@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noImplicitAny": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noEmitOnError": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "outDir": "dist"
+  },
+  "include": ["src", "test"]
+}
