@@ -5,6 +5,7 @@ export type PrattParserInterface = {
   lexer: Lexer
   symbol: SymbolToken
   prevSymbol: SymbolToken
+  state: 'initial' | 'type'
   advance(type?: TokenType, expected?: string): SymbolToken
   parse(): Expression
   parseExpression(rbp?: number): Expression
@@ -12,6 +13,7 @@ export type PrattParserInterface = {
   parseStatements(): Statement[]
   throwError(errorMessage: string): never
   getPosition(symbol: SymbolToken, withValue?: boolean): Position
+  setState(state: 'initial' | 'type'): void
 }
 
 export type PrattParser = PrattParserInterface

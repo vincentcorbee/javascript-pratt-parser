@@ -1,10 +1,12 @@
 {
-  "name": "@digitalbranch/javascript-parser",
+  "name": "@digitalbranch/javascript-pratt-parser",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/parser.js",
+  "description": "Javascript Pratt parser",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.build.json"
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "watch": "tsc -w"
   },
   "keywords": [],
   "author": "",

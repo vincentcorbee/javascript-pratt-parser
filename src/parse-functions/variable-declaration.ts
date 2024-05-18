@@ -1,4 +1,4 @@
-import { PrattParser, VariableDeclaration, VariableDeclarator } from "../types"
+import { PrattParser, VariableDeclaration, VariableDeclarator, VariableKind } from "../types"
 import { identifier } from "./identifier"
 
 export function variableDeclaration(parser: PrattParser): VariableDeclaration
@@ -16,6 +16,18 @@ export function variableDeclaration(parser: PrattParser): VariableDeclaration
       type: 'var_declr',
       id: identifier(parser),
       init: null
+    }
+
+    // @ts-ignore
+    if (parser.symbol.type === 'colon') {
+      // console.log('TYPE ANNOTATION');
+      // parser.setState('type')
+
+      // parser.advance()
+
+      // parser.parseExpression()
+
+      // console.log(parser.symbol)
     }
 
     // @ts-ignore
@@ -39,7 +51,7 @@ export function variableDeclaration(parser: PrattParser): VariableDeclaration
 
   return {
     type: 'var_decl',
-    kind: kind as 'let' | 'const',
+    kind: kind as VariableKind,
     declarations,
     loc: {
       start,

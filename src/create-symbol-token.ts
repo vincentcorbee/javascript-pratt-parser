@@ -1,9 +1,12 @@
 import { SymbolToken } from "./types"
-import { LED, NUD, STD } from "./handlers"
+import * as initialHandlers from "./handlers"
 import { Token } from "./lexer/types"
+import * as typeHandlers from './type-handlers'
 
-export function createSymbolToken(token: Token, line: number, col: number): SymbolToken {
-  const { type, value } = token
+export function createSymbolToken(token: Token, line: number, col: number, state: 'initial' | 'type'): SymbolToken {
+  const { type } = token
+
+  const { LED, NUD, STD } = state === 'initial' ? initialHandlers : typeHandlers
 
   const name = type
 

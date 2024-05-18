@@ -14,17 +14,17 @@ import { TokenType } from "./lexer/types"
 
 export class PrattParser implements PrattParserInterface{
   public lexer: Lexer
-
   public symbol: SymbolToken
-
   public prevSymbol: SymbolToken
+  public state: 'initial' | 'type'
 
   private started = false
 
   constructor(source: string)
   {
+    this.state = 'initial'
     this.lexer = new Lexer(source)
-    this.symbol = this.prevSymbol = createSymbolToken({ type: 'eof', value: '' }, 1, 0)
+    this.symbol = this.prevSymbol = createSymbolToken({ type: 'eof', value: '' }, 1, 0, this.state)
   }
 
   getPosition(symbol: SymbolToken, withValue = true): Position
@@ -33,6 +33,15 @@ export class PrattParser implements PrattParserInterface{
       line: symbol.line,
       column: symbol.col + (withValue ? symbol.value.length : 0)
     }
+  }
+
+  setState(state: 'initial' | 'type'): void
+  {
+    this.state = state
+
+    const { value, type, error, line, col } = this.symbol
+
+    this.symbol = createSymbolToken({ value, type, error }, line, col, state)
   }
 
   throwError(errorMessage: string): never
@@ -51,13 +60,13 @@ export class PrattParser implements PrattParserInterface{
 
     this.prevSymbol = symbol
 
-    if (this.lexer.expect('eof')) return this.symbol = createSymbolToken({ type: 'eof', value: '' }, this.lexer.line, this.lexer.col)
+    if (this.lexer.expect('eof')) return this.symbol = createSymbolToken({ type: 'eof', value: '' }, this.lexer.line, this.lexer.col, this.state)
 
     const token =  this.lexer.next()
 
     const { line, col } = this.lexer
 
-    return this.symbol = createSymbolToken(token, line, col - token.value.length)
+    return this.symbol = createSymbolToken(token, line, col - token.value.length, this.state)
   }
 
   parseExpression(rbp = 0): Expression

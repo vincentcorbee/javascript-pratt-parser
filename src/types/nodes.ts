@@ -27,6 +27,8 @@ export type ASTNodeType =
   | 'property'
   | 'while_stmt'
 
+export type VariableKind = 'let' | 'const'
+
 export type SourceLocation = {
   source?: string | null;
   start: Position;
@@ -140,7 +142,7 @@ export type IfStatement = {
 export type VariableDeclaration = {
   type: "var_decl"
   declarations: VariableDeclarator[];
-  kind: "let" | "const";
+  kind: VariableKind;
 } & ASTNode
 
 export type VariableStatement = VariableDeclaration

@@ -77,6 +77,7 @@ export type LexerInterface = {
   expect(tokenType: TokenType): boolean
   advance(): void
   next(): Token
+  [Symbol.iterator](): Iterator<Token>
 }
 
 export type LexerOptions = {

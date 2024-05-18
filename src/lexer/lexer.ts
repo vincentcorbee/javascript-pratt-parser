@@ -38,7 +38,8 @@ export class Lexer implements LexerInterface{
     this.ignoreComments = options.ignoreComments ?? true
   }
 
-  peek(): Token {
+  peek(): Token
+  {
     const {index, col, line} = this;
 
     const token = this.next();
@@ -50,7 +51,8 @@ export class Lexer implements LexerInterface{
     return token;
   }
 
-  lookahead(num: number): Token {
+  lookahead(num: number): Token
+  {
     const index = this.index
 
     while (num > 0) {
@@ -66,15 +68,18 @@ export class Lexer implements LexerInterface{
     return token
   }
 
-  expect(tokenType: TokenType): boolean {
+  expect(tokenType: TokenType): boolean
+  {
     return this.peek().type === tokenType
   }
 
-  advance(): void {
+  advance(): void
+  {
     this.next()
   }
 
-  next(): Token {
+  next(): Token
+  {
     if (!hasData(this)) return {
       type: 'eof',
       value: ''
@@ -221,7 +226,8 @@ export class Lexer implements LexerInterface{
     }
   }
 
-  *[Symbol.iterator]() {
+  *[Symbol.iterator]()
+  {
     while (true) {
       const token = this.next()
 
