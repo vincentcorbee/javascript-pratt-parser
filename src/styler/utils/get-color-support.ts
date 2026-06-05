@@ -7,15 +7,21 @@ const ColorDepthToLevel: { [color in ColorDepth]: ColorLevel }= {
   24: 3
 } as const
 
+/* getColorDepth only exists on TTY streams; fall back to 1 (no color) for
+   piped / non-interactive output, where calling it would throw. */
+const getColorDepth = (stream?: { getColorDepth?: () => number }): ColorDepth =>
+  stream && typeof stream.getColorDepth === 'function' ? (stream.getColorDepth() as ColorDepth) : 1
+
 export const getColorSupport = (): ColorSupport => {
-  const { COLORTERM: colorTerm, TERM: term } = globalThis.process !== undefined ? process.env : {}
+  const hasProcess = globalThis.process !== undefined
+  const { COLORTERM: colorTerm, TERM: term } = hasProcess ? process.env : {}
 
   return {
     term,
     colorTerm,
     colorDepth: {
-      stdout: ColorDepthToLevel[globalThis.process !== undefined ? process.stdout.getColorDepth() as ColorDepth : 24],
-      stderr: ColorDepthToLevel[globalThis.process !== undefined ? process.stderr.getColorDepth() as ColorDepth : 24]
+      stdout: ColorDepthToLevel[hasProcess ? getColorDepth(process.stdout) : 1],
+      stderr: ColorDepthToLevel[hasProcess ? getColorDepth(process.stderr) : 1]
     }
   }
 }
