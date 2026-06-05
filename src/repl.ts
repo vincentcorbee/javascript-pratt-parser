@@ -1,14 +1,14 @@
 import { interpret } from './interpret';
 import { compile } from './compile';
 import { EnvironmentRecord } from './environment-record';
-import { styler } from '@digitalbranch/styler';
+import { styler } from './styler';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import path from 'node:path';
 import { highlight } from './highlight';
 
 const env = new EnvironmentRecord(null, { console: { value: console, mutable: false } })
 
-const historyFileName = '.repl_history'
+const HISTORY_FILE_NAME = '.repl_history'
 
 function quit(process: NodeJS.Process, output: NodeJS.WriteStream) {
   output.write(styler.bold.blue('\nBye!\n'))
@@ -18,7 +18,7 @@ function quit(process: NodeJS.Process, output: NodeJS.WriteStream) {
 
 function loadHistory(process: NodeJS.Process): string[]
 {
-  const location = path.resolve(process.env.HOME ?? '', historyFileName)
+  const location = path.resolve(process.env.HOME ?? '', HISTORY_FILE_NAME)
 
   if (!existsSync(location)) return []
 
@@ -29,7 +29,7 @@ function loadHistory(process: NodeJS.Process): string[]
 
 function saveHistory(process: NodeJS.Process, history: string[]): void
 {
-  const location = path.resolve(process.env.HOME ?? '', historyFileName)
+  const location = path.resolve(process.env.HOME ?? '', HISTORY_FILE_NAME)
 
   writeFileSync(location, history.join('\n'))
 }
@@ -48,9 +48,7 @@ function showHelp(output: NodeJS.WriteStream)
 }
 
 const prompt = '$'
-
 const input = process.stdin
-
 const output = process.stdout
 
 let lines: string[] = []
@@ -58,29 +56,19 @@ let lines: string[] = []
 const history: string[] = loadHistory(process)
 
 output.write(`\n${styler.blue.bold('Welcome')}\n\n`)
-
 output.write(`Type ${styler.yellow.bold('.help')} for more information.\n\n`)
-
 output.write(`${prompt} `)
 
 input.setRawMode(true)
 
 let column = 0
-
 let historyEntry = history.length || 1
-
 let line: string = ''
-
 let CSIDirCode = ''
-
 let ctrlCPressed = false
-
 let isMultiline = false
-
 let multiline = ''
-
 let leftBraces: string[] = []
-
 let rightBraces: string[] = []
 
 input.on('data', (data: Buffer) => {
@@ -147,7 +135,6 @@ input.on('data', (data: Buffer) => {
         }
 
         leftBraces = leftBraces.concat(line.match(/{/g) ?? [])
-
         rightBraces = rightBraces.concat(line.match(/}/g) ?? [])
 
         multiline += `${' '.repeat(leftBraces.length - rightBraces.length)}${line}\n`

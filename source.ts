@@ -8,4 +8,4 @@
 
 // const foo: string = "Hello";
 
-const foo = "Hello";
+{ foo: 'bar' }

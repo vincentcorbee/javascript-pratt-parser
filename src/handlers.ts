@@ -23,6 +23,7 @@ import {
   whileStatement,
 } from "./parse-functions"
 
+/* Statement denotation */
 export const STD = {
   "left_curl_brace": {
     std: blockStatement
@@ -120,6 +121,10 @@ export const LED = {
     led: conditionalExpression,
   },
   "eq": {
+    lbp: 40,
+    led: binaryExpression,
+  },
+  "strict_eq": {
     lbp: 40,
     led: binaryExpression,
   },

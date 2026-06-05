@@ -62,17 +62,13 @@ export function interpret(node: Program | Statement | Expression, env: Scope = n
     case "for_of_stmt":
       {
         const scope = new EnvironmentRecord(env as EnvironmentRecord)
-
         const { kind } = node.left
-
         const [ { id: { name } }] = node.left.declarations
-
         const right = interpret(node.right, env)
 
         if (!right || !isIterable(right.value)) throw TypeError(`TypeError: ${right?.value} is not iterable`)
 
         const { value } = right
-
         const iterator = value[Symbol.iterator]()
 
         let result

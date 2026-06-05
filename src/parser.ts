@@ -12,16 +12,25 @@ import { createSymbolToken } from "./create-symbol-token"
 import { program } from "./parse-functions"
 import { TokenType } from "./lexer/types"
 
-export class PrattParser implements PrattParserInterface{
+export class PrattParser implements PrattParserInterface {
   public lexer: Lexer
   public symbol: SymbolToken
   public prevSymbol: SymbolToken
   public state: 'initial' | 'type'
 
-  private started = false
+  private started: boolean
 
-  constructor(source: string)
+  constructor(source: string = '')
   {
+    this.started = false
+    this.state = 'initial'
+    this.lexer = new Lexer(source)
+    this.symbol = this.prevSymbol = createSymbolToken({ type: 'eof', value: '' }, 1, 0, this.state)
+  }
+
+  setSource(source: string)
+  {
+    this.started = false
     this.state = 'initial'
     this.lexer = new Lexer(source)
     this.symbol = this.prevSymbol = createSymbolToken({ type: 'eof', value: '' }, 1, 0, this.state)
@@ -116,7 +125,7 @@ export class PrattParser implements PrattParserInterface{
 
     /* FunctionExpression not allowed */
 
-    if(expression.type === 'func_exp') throwError(`Unexpected token "("`, line, col ,index, source, '');
+    if (expression.type === 'func_exp') throwError(`Unexpected token "("`, line, col ,index, source, '');
 
     if (expression.type === 'func_decl') return expression
 

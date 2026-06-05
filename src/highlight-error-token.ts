@@ -1,4 +1,4 @@
-import { styler } from "@digitalbranch/styler"
+import { styler } from "./styler"
 import { TokenLocation } from "./types"
 import { Token } from "./lexer/types"
 

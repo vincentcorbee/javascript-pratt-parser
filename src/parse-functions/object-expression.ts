@@ -11,7 +11,6 @@ export function objectExpression(parser: PrattParser): ObjectExpression
       if(parser.symbol.type !== 'identifier' && parser.symbol.type !== 'literal' && parser.symbol.type !== 'comma') parser.throwError('Unexpected token')
 
       const start = parser.getPosition(parser.symbol, false)
-      /* This can only by  */
       const key = parser.parseExpression() as any
 
       parser.advance('colon', ':')

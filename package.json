@@ -2,21 +2,27 @@
   "name": "@digitalbranch/javascript-pratt-parser",
   "version": "1.0.0",
   "description": "Javascript Pratt parser",
+  "keywords": [],
+  "author": "V.J.M. Corbee",
+  "license": "ISC",
   "main": "dist/index.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "files": ["dist", "node_modules"],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "watch": "tsc -w"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.10.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.3.2"
-  },
-  "dependencies": {
-    "@digitalbranch/styler": "link:../../../npm-packages/styler"
+    "typescript": "^5.6.3"
   }
 }

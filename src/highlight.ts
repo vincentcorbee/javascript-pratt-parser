@@ -1,4 +1,4 @@
-import { styler } from "@digitalbranch/styler"
+import { styler } from "./styler"
 import { Lexer } from "./lexer/lexer"
 import { HighlightCallback } from "./types"
 import { Token } from "./lexer/types"
@@ -19,7 +19,6 @@ const gray = styler.gray
 export function highlight(source: string, cb?: HighlightCallback): string
 {
   let blockLevel = 0;
-
   let highlightedSource = ''
 
   const lexer = new Lexer(source, { ignoreNewline: false, ignoreWhiteSpace: false, throws: false, ignoreComments: false })

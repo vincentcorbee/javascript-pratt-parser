@@ -1,0 +1,5 @@
+export * from './create-sequences'
+export * from './get-color-support'
+export * from './styler-factory'
+export * from './create-colors'
+export * from './get-augmented-options'

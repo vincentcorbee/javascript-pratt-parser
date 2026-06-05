@@ -18,30 +18,31 @@ import {
 import { throwError } from "../throw-error";
 
 const Keywords = new Set<Keyword>(['typeof', 'let', 'function', 'return', 'while', 'for', 'break', 'else', 'if', 'const', 'of'])
-
 const Literals = new Set<LiteralType>(['true', 'false', 'null'])
 
-export class Lexer implements LexerInterface{
+export class Lexer implements LexerInterface {
   index = 0;
   line = 1;
   col = 0;
 
-  public ignoreWhiteSpace: boolean
-  public ignoreNewLine: boolean
-  public throws: boolean
-  public ignoreComments: boolean
+  ignoreWhiteSpace: boolean
+  ignoreNewLine: boolean
+  throws: boolean
+  ignoreComments: boolean
 
-  constructor(public source: string, options: LexerOptions = {}) {
+  source: string
+
+  constructor(source: string, options: LexerOptions = {}) {
     this.ignoreWhiteSpace = options.ignoreWhiteSpace ?? true
     this.ignoreNewLine = options.ignoreNewline ?? true
     this.throws = options.throws ?? true
     this.ignoreComments = options.ignoreComments ?? true
+    this.source = source
   }
 
   peek(): Token
   {
-    const {index, col, line} = this;
-
+    const { index, col, line } = this;
     const token = this.next();
 
     this.index = index;
@@ -135,7 +136,10 @@ export class Lexer implements LexerInterface{
 
         return tokenCreate('div', eatChar(this))
       }
-      case '=': {
+      case '=':
+      {
+        if (peekAt(this, 1) === '=' && peekAt(this, 2) === '=') return tokenCreate('strict_eq', eatChar(this, 3))
+
         if (peekAt(this, 1) === '=') return tokenCreate('eq', eatChar(this, 2))
 
         return tokenCreate('assign', eatChar(this))
@@ -170,13 +174,15 @@ export class Lexer implements LexerInterface{
       case "(": return tokenCreate('left_paren', eatChar(this))
       case ")": return tokenCreate('right_paren', eatChar(this))
       case ",": return tokenCreate('comma', eatChar(this))
-      case ".": {
+      case ".":
+      {
         if (isInteger(peekAt(this, 1))) return tokenCreate('number', eatChar(this) + eatNumber(this))
 
         return tokenCreate('dot', eatChar(this))
       }
       case "'":
-      case '"': {
+      case '"':
+      {
         const { value, error } = eatStringLiteral(this, nextChar)
 
         if (error) {
@@ -224,6 +230,12 @@ export class Lexer implements LexerInterface{
 
         else return tokenCreate('error', eatChar(this), errorMessage)
     }
+  }
+
+  reset() {
+    this.col = 0
+    this.line = 1
+    this.index = 0
   }
 
   *[Symbol.iterator]()

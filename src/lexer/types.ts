@@ -38,6 +38,7 @@ export type TokenType =
     | 'div'
     | 'assign'
     | 'eq'
+    | 'strict_eq'
     | 'bang'
     | 'bang_bang'
     | 'semi'
@@ -77,6 +78,7 @@ export type LexerInterface = {
   expect(tokenType: TokenType): boolean
   advance(): void
   next(): Token
+  reset(): void
   [Symbol.iterator](): Iterator<Token>
 }
 
